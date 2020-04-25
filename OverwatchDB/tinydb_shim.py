@@ -3,7 +3,8 @@ from .db_shim import AbstractDBHandler
 from .utils import (
     TODAY,
     OWRELEASEDATE,
-    OverwatchHeroes
+    OverwatchHeroes,
+    datetime_fromisoformat
 )
 import logging
 import json
@@ -44,7 +45,7 @@ class TinyDBHandler(AbstractDBHandler):
 
     def _get_result_sorter_func(self):
         def sort_by_date(entry):
-            return datetime.date.fromisoformat(entry["video_date"])
+            return datetime_fromisoformat(entry["video_date"])
         return sort_by_date
 
     def _url_check(self, url: str) -> bool:
@@ -55,7 +56,7 @@ class TinyDBHandler(AbstractDBHandler):
     
     def _validate_date(self, date_prototype: str) -> str:
         # Expected prototype ISO 8061 (yyyy-mm-dd)
-        candidate = datetime.date.fromisoformat(date_prototype)
+        candidate = datetime_fromisoformat(date_prototype)
         if candidate > TODAY:
             raise ValueError(f"{date_prototype} is after today")
         if candidate < OWRELEASEDATE:
@@ -105,7 +106,7 @@ class TinyDBHandler(AbstractDBHandler):
         def date_filter(
             video_date: str, start_date: datetime.date, end_date: datetime.date
         ):
-            test_date = datetime.date.fromisoformat(video_date)
+            test_date = datetime_fromisoformat(video_date)
             return start_date <= test_date <= end_date
         return Query().video_date.test(date_filter, start_date, end_date)
 

@@ -1,5 +1,15 @@
 from enum import Enum, auto
 import datetime
+from sys import version_info
+
+
+def datetime_fromisoformat(date: str) -> datetime.date:
+    # patch because .fromisoformat was only came with Python3.7+
+    if version_info.minor <= 6:
+        yyyy, mm, dd = date.split("-")
+        return datetime.date(year=int(yyyy), month=int(mm), day=int(dd))
+    return datetime.date.fromisoformat(date)
+
 
 class OverwatchHeroes(Enum):
     Ana = auto()
@@ -40,7 +50,7 @@ OWHeroesList = [name.lower() for name, _ in OverwatchHeroes.__members__.items()]
 OWHeroesMap = {name.lower(): hero  for name, hero in OverwatchHeroes.__members__.items()}
 
 TODAY = datetime.date.today()
-OWRELEASEDATE = datetime.date.fromisoformat("2016-05-24")
+OWRELEASEDATE = datetime_fromisoformat("2016-05-24")
 
 
 def get_overwatch_hero(hero_name: str) -> OverwatchHeroes:
