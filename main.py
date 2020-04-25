@@ -35,7 +35,7 @@ DB = None
 @app.route("/retrieve")
 def retrieve_records():
     """
-    GET /retrieve?start_date=YYYY-MM-DD&end_date=YYY-MM-DD&hero=HERO
+    GET /retrieve?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD&hero=HERO
     """
     try:
         start_date = request.args.get("start_date")
